@@ -1,0 +1,41 @@
+Plug 'sonph/onehalf', { 'rtp': 'vim/' }
+Plug 'terryma/vim-multiple-cursors'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-sensible'
+Plug 'justinmk/vim-sneak'
+Plug 'guns/vim-sexp'
+Plug 'tpope/vim-sexp-mappings-for-regular-people'
+Plug 'luochen1990/rainbow'
+Plug 'Yggdroot/indentLine'
+Plug 'mtth/scratch.vim'
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'psliwka/vim-smoothie'
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'othree/yajs.vim'
+Plug 'yuezk/vim-js'
+Plug 'maxmellon/vim-jsx-pretty'
+
+Plug 'sheerun/vim-polyglot'
+
+Plug 'rust-lang/rust.vim'
+Plug 'mustache/vim-mustache-handlebars' 
+Plug 'wilsaj/chuck.vim'
+
+Plug 'pangloss/vim-javascript'
+Plug 'heavenshell/vim-jsdoc'
+
+Plug 'cocopon/iceberg.vim/'
+Plug 'altercation/vim-colors-solarized'
+
+Plug 'edkolev/tmuxline.vim'
+Plug 'rakr/vim-one'
+Plug 'fcpg/vim-orbital'
+Plug 'kyoz/purify', { 'rtp': 'vim' }
+Plug 'morhetz/gruvbox'
+
+Plug 'flrnprz/plastic.vim'
+

@@ -1,0 +1,112 @@
+" Map semicolon to colon
+nmap ; :
+
+" Display tabs as >-
+set list
+set listchars=tab:>-
+
+" Fix fugitive git tag warning
+set tags^=./git/tags;
+
+" Fix g:os so it works with Mac Unix and Linux Unix
+if !exists("g:os")
+  if has("win64") || has("win32") || has("win16")
+    let g:os = "Windows"
+  else
+    let g:os = substitute(system('uname'), '\n', '', '')
+  endif
+endif
+
+" Colorscheme settings
+set termguicolors     " enable true colors support
+syntax enable
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+" Conditional schemes for OSX or Linux
+if g:os == "Linux"
+  colorscheme gruvbox
+else
+  colorscheme one
+  let g:onedark_termcolors=24
+endif
+set background=dark
+
+" Airline config
+if g:os == "Linux"
+  let g:airline_theme='gruvbox'
+else
+  let g:airline_theme='one'
+endif
+
+let g:airline#extensions#tmuxline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+
+" ChucK language settings
+autocmd FileType chuck setlocal shiftwidth=4 softtabstop=4 expandtab
+
+" Use ESLint
+let g:ale_linters = { 'javascript': ['eslint'] }
+
+" cosco semicolon bindings
+autocmd FileType javascript,css,chuck nmap <silent> <Leader>; <Plug>(cosco-commaOrSemiColon)
+autocmd FileType javascript,css,chuck imap <silent> <Leader>; <c-o><Plug>(cosco-commaOrSemiColon)"
+
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+
+" bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+" enable JSDoc highlighting
+let g:javascript_plugin_jsdoc = 1
+
+" enable mouse
+set mouse=a
+
+" keyboard mappings for fzf.vim
+function! s:ag_to_qf(line)
+  let parts = split(a:line, ':')
+  return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
+        \ 'text': join(parts[3:], ':')}
+endfunction
+
+function! s:ag_handler(lines)
+  if len(a:lines) < 2 | return | endif
+
+  let cmd = get({'ctrl-x': 'split',
+        \ 'ctrl-v': 'vertical split',
+        \ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
+  let list = map(a:lines[1:], 's:ag_to_qf(v:val)')
+
+  let first = list[0]
+  execute cmd escape(first.filename, ' %#\')
+  execute first.lnum
+  execute 'normal!' first.col.'|zz'
+
+  if len(list) > 1
+    call setqflist(list)
+    copen
+    wincmd p
+  endif
+endfunction
+
+command! -nargs=* Ag call fzf#run({
+      \ 'source':  printf('ag --nogroup --column --color "%s"',
+      \                   escape(empty(<q-args>) ? '^(?=.)' : <q-args>, '"\')),
+      \ 'sink*':    function('<sid>ag_handler'),
+      \ 'options': '--ansi --expect=ctrl-t,ctrl-v,ctrl-x --delimiter : --nth 4.. '.
+      \            '--multi --bind=ctrl-a:select-all,ctrl-d:deselect-all '.
+      \            '--color hl:68,hl+:110',
+      \ 'down':    '50%'
+      \ })

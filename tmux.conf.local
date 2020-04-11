@@ -1,0 +1,47 @@
+# Add truecolor support
+set-option -ga terminal-overrides ",xterm-256color:Tc"
+# Default terminal is 256 colors
+set -g default-terminal "screen-256color"
+
+# Enable mouse-mode
+set-option -g mouse on
+
+# Set theme
+set -g @themepack 'basic'
+
+# be sure to see note* below
+set -g window-status-format '#I:#(pwd="#{pane_current_path}"; echo ${pwd####*/})#F'
+set -g window-status-current-format '#I:#(pwd="#{pane_current_path}"; echo ${pwd####*/})#F'
+
+# status bar updates every 15s by default**, change to 1s here 
+# (this step is optional - a lower latency might have negative battery/cpu usage
+# impacts)
+set -g status-interval 1
+
+# List of plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'nhdaly/tmux-better-mouse-mode'
+set -g @plugin 'jimeh/tmux-themepack'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-battery'
+
+# Other examples:
+# set -g @plugin 'github_username/plugin_name'
+# set -g @plugin 'git@github.com/user/plugin'
+# set -g @plugin 'git@bitbucket.com/user/plugin'
+
+set -g status-right '#{battery_status_bg} Batt: #{battery_icon} #{battery_percentage} #{battery_remain} | %a %h-%d %H:%M '
+
+# Use prefix C-k to clear the scrolled off (hidden) buffer lines
+bind C-k clear-history
+
+bind % split-window -h -c '#{pane_current_path}'  # Split panes horizontal
+bind '"' split-window -v -c '#{pane_current_path}'  # Split panes vertically
+
+# Start new windows with current directory
+bind c new-window -c "#{pane_current_path}"
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of
+# tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'

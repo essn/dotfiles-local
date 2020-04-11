@@ -1,0 +1,8 @@
+# Commands
+alias be='bundle exec'
+alias ls='ls -l'
+alias cdl='cd "$1" && ls'
+alias gdbm='git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d'
+
+# Sensitive Aliases
+[[ -f ./sensitive-aliases.local ]] && source ./sensitive-aliases.local
